@@ -31,3 +31,6 @@ Shoot an email to k.nitin.r [at] gmail.com
 
 = 0.2 =
 * Experimental - introduced selection order random or chronological
+
+= 0.3 =
+* Added experimental Atom feed support

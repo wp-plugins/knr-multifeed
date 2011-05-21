@@ -111,13 +111,26 @@ class FeedReader {
 		
 		$this->itemarray = array();
 
-		foreach($this->domdoc->getElementsByTagName('item') as $iterFeedItem) {
-			$iterNewsItem = new NewsItem();
-			$iterNewsItem->title = $iterFeedItem->getElementsByTagName('title')->item(0)->nodeValue;
-			$iterNewsItem->publishdate = $iterFeedItem->getElementsByTagName('pubDate')->item(0)->nodeValue;
-			$iterNewsItem->hyperlink = $iterFeedItem->getElementsByTagName('link')->item(0)->nodeValue;
-			$iterNewsItem->description = $iterFeedItem->getElementsByTagName('description')->item(0)->nodeValue;
-			$this->itemarray[] = $iterNewsItem;
+		if ($this->domdoc->firstChild->nodeName == 'rss') {
+			foreach($this->domdoc->getElementsByTagName('item') as $iterFeedItem) {
+				$iterNewsItem = new NewsItem();
+				$iterNewsItem->title = $iterFeedItem->getElementsByTagName('title')->item(0)->nodeValue;
+				$iterNewsItem->publishdate = $iterFeedItem->getElementsByTagName('pubDate')->item(0)->nodeValue;
+				$iterNewsItem->hyperlink = $iterFeedItem->getElementsByTagName('link')->item(0)->nodeValue;
+				$iterNewsItem->description = $iterFeedItem->getElementsByTagName('description')->item(0)->nodeValue;
+				$this->itemarray[] = $iterNewsItem;
+			}
+		} else if ($this->domdoc->firstChild->nodeName == 'feed') {
+			foreach($this->domdoc->getElementsByTagName('entry') as $iterFeedItem) {
+				$iterNewsItem = new NewsItem();
+				$iterNewsItem->title = $iterFeedItem->getElementsByTagName('title')->item(0)->nodeValue;
+				$iterNewsItem->publishdate = $iterFeedItem->getElementsByTagName('updated')->item(0)->nodeValue;
+				$iterNewsItem->hyperlink = $iterFeedItem->getElementsByTagName('link')->item(0)->nodeValue;
+				$iterNewsItem->description = $iterFeedItem->getElementsByTagName('summary')->item(0)->nodeValue;
+				$this->itemarray[] = $iterNewsItem;
+			}
+		} else {
+			//no items
 		}
 		
 		//echo '<p>Item count: '.count($this->itemarray).'</p>';

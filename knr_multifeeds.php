@@ -4,7 +4,7 @@ Plugin Name: KNR Multi-Feed
 Description: A plugin for displaying feeds from multiple sources
 Author: Nitin Reddy Katkam
 Author URI: http://www.nitinkatkam.com
-Version: 0.2
+Version: 0.3
 */
 
 /*
