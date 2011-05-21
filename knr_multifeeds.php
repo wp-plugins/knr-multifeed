@@ -9,6 +9,9 @@ Author: Nitin Reddy Katkam
 include(dirname(__FILE__).'/'.'nitin_feedreader.php');
 
 class KnrMultiFeeds extends WP_Widget {
+	static function heredoc($arg) { return $arg; }
+	static $heredoc = 'heredoc';
+
 	public function KnrMultiFeeds() {
 		parent::WP_Widget(false, 'KNR Multi-Feed');
 	}
@@ -23,6 +26,7 @@ class KnrMultiFeeds extends WP_Widget {
 		
 		$urllines = $instance['urllines'];
 		$itemlimit = $instance['itemlimit'];
+		$selecttype = $instance['selecttype'];
 		
 		if (isset($urllines) && strlen($urllines)>0) {
 			$itemArray = array();
@@ -37,7 +41,12 @@ class KnrMultiFeeds extends WP_Widget {
 				);
 			}
 			
-			shuffle($itemArray);
+			$sorter = new NewsItemSorter($itemArray);
+			if ($selecttype == 'Random')
+				$sorter->Shuffle($itemArray);
+			elseif ($selecttype == 'Chronological')
+				$sorter->SortByDate($itemArray);
+			//shuffle($itemArray);
 			$itemArray = array_slice($itemArray, 0, $itemlimit);
 			FeedReader::renderAsList($itemArray);
 		}
@@ -58,6 +67,7 @@ class KnrMultiFeeds extends WP_Widget {
 		$instance['title'] = strip_tags($new_instance['title']);
 		$instance['urllines'] = strip_tags($new_instance['urllines']);
 		$instance['itemlimit'] = strip_tags($new_instance['itemlimit']);
+		$instance['selecttype'] = strip_tags($new_instance['selecttype']);
 		
 		return $instance;
 	}
@@ -74,7 +84,13 @@ class KnrMultiFeeds extends WP_Widget {
 		$itemlimit = esc_attr($instance['itemlimit']);
 		$itemlimit_fieldId = $this->get_field_id('itemlimit');
 		$itemlimit_fieldName = $this->get_field_name('itemlimit');
-
+		
+		$selecttype = esc_attr($instance['selecttype']);
+		$selecttype_fieldId = $this->get_field_id('selecttype');
+		$selecttype_fieldName = $this->get_field_name('selecttype');
+		
+		$selectedStringSelectionTypeRandom = $selecttype == 'Random' ? ' selected=\"selected\"' : '';
+		$selectedStringSelectionTypeChronological = $selecttype == 'Chronological' ? ' selected=\"selected\"' : '';
 		
 		echo "
 <p>
@@ -88,6 +104,15 @@ class KnrMultiFeeds extends WP_Widget {
 <p>
 	<label>No. of Items To Display</label>
 	<input type=\"text\" name=\"${itemlimit_fieldName}\" id=\"${itemlimit_fieldId}\" value=\"${itemlimit}\" />
+</p>
+<p>
+	<label>Item Selection Type</label>
+	<select name=\"${selecttype_fieldName}\" id=\"${selecttype_fieldId}\">
+		<option value=\"Random\"$selectedStringSelectionTypeRandom>Random</option>
+		<option value=\"Chronological\"$selectedStringSelectionTypeChronological>Chronological</option>
+	</select>
+	<br />
+	<span style=\"color: Gray\">Chronological sort is experimental</span>
 </p>
 ";
 	}

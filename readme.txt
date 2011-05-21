@@ -9,7 +9,7 @@ The KNR MultiFeed plugin enables users to display multiple news feeds within the
 
 == Description ==
 
-The KNR MultiFeed plugin enables users to display multiple news feeds within the same widget. Currently, the widget randomizes the items displayed in the widget instead of displaying them in chronological order.
+The KNR MultiFeed plugin enables users to display multiple news feeds within the same widget. The widget randomizes the items displayed in the widget or displaying them in chronological order (experimental).
 
 == Installation ==
 
@@ -28,3 +28,6 @@ Shoot an email to k.nitin.r [at] gmail.com
 
 = 0.1 =
 * The first version.
+
+= 0.2 =
+* Experimental - introduced selection order random or chronological

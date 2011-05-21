@@ -19,6 +19,23 @@ class NewsItem {
 	var $description;
 }
 
+class NewsItemSorter {
+	var $itemArr;
+	function NewsItemSorter($aArr) {
+		$this->itemArr = $aArr;
+	}
+	function CompareIt($a,$b) {
+		return strtotime ($a->publishdate) == strtotime ($b->publishdate) ? 0 : (strtotime ($a->publishdate) > strtotime ($b->publishdate) ? 1 : -1);
+	}
+	function SortByDate() {
+		usort($this->itemArr, array('NewsItemSorter', 'CompareIt'));
+		return $itemArr;
+	}
+	function Shuffle() {
+		shuffle($itemArr);
+	}
+}
+
 class TextUtility {
 	public static function fix_smartchar($atxt) {
 		$atxt = str_replace('’', '\'', $atxt); //smart closing quote (apostrophe)
