@@ -34,3 +34,6 @@ Shoot an email to k.nitin.r [at] gmail.com
 
 = 0.3 =
 * Added experimental Atom feed support
+
+= 0.4 =
+* Fixed PHP notices

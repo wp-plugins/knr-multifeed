@@ -4,7 +4,7 @@ Plugin Name: KNR Multi-Feed
 Description: A plugin for displaying feeds from multiple sources
 Author: Nitin Reddy Katkam
 Author URI: http://www.nitinkatkam.com
-Version: 0.3
+Version: 0.4
 */
 
 /*
@@ -100,19 +100,23 @@ class KnrMultiFeeds extends WP_Widget {
 	}
 		
 	public function form($instance) {
-		$title = esc_attr($instance['title']);		
+		if (isset($instance) && isset($instance['title'])) $title = esc_attr($instance['title']);
+		$title = '';
 		$title_fieldId = $this->get_field_id('title');
 		$title_fieldName = $this->get_field_name('title');
 
-		$urllines = esc_attr($instance['urllines']);
+		if (isset($instance) && isset($instance['urllines'])) $urllines = esc_attr($instance['urllines']);
+		$urllines = '';
 		$urllines_fieldId = $this->get_field_id('urllines');
 		$urllines_fieldName = $this->get_field_name('urllines');
 
-		$itemlimit = esc_attr($instance['itemlimit']);
+		if (isset($instance) && isset($instance['itemlimit'])) $itemlimit = esc_attr($instance['itemlimit']);
+		$itemlimit = 10;
 		$itemlimit_fieldId = $this->get_field_id('itemlimit');
 		$itemlimit_fieldName = $this->get_field_name('itemlimit');
 		
-		$selecttype = esc_attr($instance['selecttype']);
+		if (isset($instance) && isset($instance['selecttype'])) $selecttype = esc_attr($instance['selecttype']);
+		$selecttype = null;
 		$selecttype_fieldId = $this->get_field_id('selecttype');
 		$selecttype_fieldName = $this->get_field_name('selecttype');
 		
@@ -138,8 +142,6 @@ class KnrMultiFeeds extends WP_Widget {
 		<option value=\"Random\"$selectedStringSelectionTypeRandom>Random</option>
 		<option value=\"Chronological\"$selectedStringSelectionTypeChronological>Chronological</option>
 	</select>
-	<br />
-	<span style=\"color: Gray\">Chronological sort is experimental</span>
 </p>
 ";
 	}
