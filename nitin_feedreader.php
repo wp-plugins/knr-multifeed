@@ -25,16 +25,16 @@
 	author for more details.
 */
 
-define(FEEDURL, 'http://feeds.feedburner.com/KrishnaConnect?format=xml');
-define(LOCALFILE, 'localfile.xml');
+define('FEEDURL', 'http://feeds.feedburner.com/KrishnaConnect?format=xml');
+define('LOCALFILE', 'localfile.xml');
 
 //The PHP_OS constant is the platform the sourcecode was built on... php_uname is the currently running OS
 if (strtolower(substr(php_uname('s'), 0, 7)) == 'windows') {
-	define(FILESYS_SLASH, '\\');
-	define(EOL_CHR, "\r\n");
+	define('FILESYS_SLASH', '\\');
+	define('EOL_CHR', "\r\n");
 } else {
-	define(FILESYS_SLASH, '/');
-	define(EOL_CHR, "\n");
+	define('FILESYS_SLASH', '/');
+	define('EOL_CHR', "\n");
 }
 	
 	
@@ -55,7 +55,7 @@ class NewsItemSorter {
 	}
 	function SortByDate() {
 		usort($this->itemArr, array('NewsItemSorter', 'CompareIt'));
-		return $itemArr;
+		return $this->itemArr;
 	}
 	function Shuffle() {
 		shuffle($itemArr);

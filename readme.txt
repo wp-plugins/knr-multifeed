@@ -1,8 +1,8 @@
 === KNR MultiFeed ===
 Contributors: k_nitin_r
 Tags: news, feeds, rss
-Requires at least: 3.0.0
-Tested up to: 3.1.2
+Requires at least: 3.3.0
+Tested up to: 3.3.1
 Stable tag: trunk
 
 The KNR MultiFeed plugin enables users to display multiple news feeds within the same widget.
@@ -19,6 +19,23 @@ This section describes how to install the plugin and get it working.
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Frequently Asked Questions ==
+
+= How can I use a shortcode? =
+
+In a page or a post, simply add your shortcode in as follows
+
+Example 1
+
+[knrmultifeed]
+http://www.n4express.com/blog/?feed=rss2
+[/knrmultifeed]
+
+Example 2
+
+[knrmultifeed itemlimit="20" selecttype="Chronological"]
+http://www.n4express.com/blog/?feed=rss2
+http://www.n4express.com/blog/?feed=comments-rss2
+[/knrmultifeed]
 
 = Where can I ask questions? =
 
@@ -37,3 +54,7 @@ Shoot an email to k.nitin.r [at] gmail.com
 
 = 0.4 =
 * Fixed PHP notices
+
+= 0.5 =
+* Added shortcode support
+* Fixed bug in chronological sort
