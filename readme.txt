@@ -18,6 +18,10 @@ This section describes how to install the plugin and get it working.
 1. Upload knr-multifeed files to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
+== Screenshots ==
+
+1. KNR MultiFeed used with a shortcode and as a widget
+
 == Frequently Asked Questions ==
 
 = How can I use a shortcode? =
@@ -57,4 +61,7 @@ Shoot an email to k.nitin.r [at] gmail.com
 
 = 0.5 =
 * Added shortcode support
-* Fixed bug in chronological sort
+* Fixed bug in chronological sort operation
+
+= 0.6 =
+* Fixed bug in random sort operation

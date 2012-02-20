@@ -5,7 +5,7 @@ Description: A plugin for displaying feeds from multiple sources
 Author: Nitin Reddy Katkam
 Author URI: http://www.nitinkatkam.com
 Plugin URI: http://www.n4express.com/blog/?page_id=501
-Version: 0.5
+Version: 0.6
 */
 
 /*

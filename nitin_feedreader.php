@@ -58,7 +58,7 @@ class NewsItemSorter {
 		return $this->itemArr;
 	}
 	function Shuffle() {
-		shuffle($itemArr);
+		shuffle($this->itemArr);
 	}
 }
 
