@@ -3,7 +3,7 @@ Contributors: k_nitin_r
 Tags: news, feeds, rss
 Requires at least: 3.3.0
 Tested up to: 3.3.1
-Stable tag: 0.6
+Stable tag: 0.7
 
 The KNR MultiFeed plugin enables users to display multiple news feeds within the same widget.
 
@@ -65,3 +65,6 @@ Shoot an email to k.nitin.r [at] gmail.com
 
 = 0.6 =
 * Fixed bug in random sort operation
+
+= 0.7 =
+* Fixed bug in displaying form values in dashboard
