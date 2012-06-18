@@ -4,7 +4,8 @@ Plugin Name: KNR Multi-Feed
 Description: A plugin for displaying feeds from multiple sources
 Author: Nitin Reddy Katkam
 Author URI: http://www.nitinkatkam.com
-Version: 0.4
+Plugin URI: http://www.n4express.com/blog/?page_id=501
+Version: 0.7
 */
 
 /*
@@ -35,6 +36,33 @@ Version: 0.4
 
 include(dirname(__FILE__).'/'.'nitin_feedreader.php');
 
+function knrmultifeed_process($urllines, $itemlimit, $selecttype, $display_output = true) {
+	$itemArray = array();
+	
+	foreach(split("\n", $urllines) as $iterUrl) {
+		$iterFr = new FeedReader(trim($iterUrl));
+		$iterFr->fetchItems();
+		$itemArray = array_merge($itemArray,
+			//array_slice(
+				$iterFr->getItems()
+			//,0,$itemlimit)
+		);
+	}
+
+	$sorter = new NewsItemSorter($itemArray);
+	if ($selecttype == 'Random')
+		$sorter->Shuffle($itemArray);
+	elseif ($selecttype == 'Chronological')
+		$sorter->SortByDate($itemArray);
+	//shuffle($itemArray);
+	$itemArray = array_slice($itemArray, 0, $itemlimit);
+	
+	if ($display_output)
+		FeedReader::renderAsList($itemArray);
+	else
+		return $itemArray;
+}
+
 class KnrMultiFeeds extends WP_Widget {
 	static function heredoc($arg) { return $arg; }
 	static $heredoc = 'heredoc';
@@ -58,6 +86,8 @@ class KnrMultiFeeds extends WP_Widget {
 		if (isset($urllines) && strlen($urllines)>0) {
 			$itemArray = array();
 			
+			knrmultifeed_process($urllines, $itemlimit, $selecttype);
+			/*
 			foreach(split("\n", $urllines) as $iterUrl) {
 				$iterFr = new FeedReader(trim($iterUrl));
 				$iterFr->fetchItems();
@@ -76,6 +106,7 @@ class KnrMultiFeeds extends WP_Widget {
 			//shuffle($itemArray);
 			$itemArray = array_slice($itemArray, 0, $itemlimit);
 			FeedReader::renderAsList($itemArray);
+			*/
 		}
 		
 		/*
@@ -100,23 +131,23 @@ class KnrMultiFeeds extends WP_Widget {
 	}
 		
 	public function form($instance) {
-		if (isset($instance) && isset($instance['title'])) $title = esc_attr($instance['title']);
 		$title = '';
+		if (isset($instance) && isset($instance['title'])) $title = esc_attr($instance['title']);
 		$title_fieldId = $this->get_field_id('title');
 		$title_fieldName = $this->get_field_name('title');
 
-		if (isset($instance) && isset($instance['urllines'])) $urllines = esc_attr($instance['urllines']);
 		$urllines = '';
+		if (isset($instance) && isset($instance['urllines'])) $urllines = esc_attr($instance['urllines']);
 		$urllines_fieldId = $this->get_field_id('urllines');
 		$urllines_fieldName = $this->get_field_name('urllines');
 
-		if (isset($instance) && isset($instance['itemlimit'])) $itemlimit = esc_attr($instance['itemlimit']);
 		$itemlimit = 10;
+		if (isset($instance) && isset($instance['itemlimit'])) $itemlimit = esc_attr($instance['itemlimit']);
 		$itemlimit_fieldId = $this->get_field_id('itemlimit');
 		$itemlimit_fieldName = $this->get_field_name('itemlimit');
 		
-		if (isset($instance) && isset($instance['selecttype'])) $selecttype = esc_attr($instance['selecttype']);
 		$selecttype = null;
+		if (isset($instance) && isset($instance['selecttype'])) $selecttype = esc_attr($instance['selecttype']);
 		$selecttype_fieldId = $this->get_field_id('selecttype');
 		$selecttype_fieldName = $this->get_field_name('selecttype');
 		
@@ -148,3 +179,35 @@ class KnrMultiFeeds extends WP_Widget {
 }
 
 add_action('widgets_init', create_function('', 'return register_widget(\'KnrMultiFeeds\');'));
+
+class KnrMultiFeedShortcode {
+	function main($atts, $content=null) {
+		if (null == $content) return;
+		$content = trim(strip_tags($content));
+		if ('' == $content) return;
+		
+		$params = shortcode_atts( array(
+		'itemlimit' => 20,
+		'selecttype' => 'Chronological'
+		), $atts );
+	
+		$items = knrmultifeed_process($content, $params['itemlimit'], $params['selecttype'], false);
+		
+		$markup = '';
+		$markup .= '<ul>'."\n";
+		foreach($items as $iterItem) {
+			$markup .= '	<li>'."\n";
+			
+			$markup .= '		<a href="'.$iterItem->hyperlink.'">'."\n";	//Open A HREF tag
+			$markup .= '		'.TextUtility::fix_smartchar($iterItem->title)."\n";	//Title
+			$markup .= '		</a>'."\n";	//Close A HREF tag
+			
+			$markup .= '	</li>'."\n";
+		}
+		$markup .= '</ul>'."\n";
+		
+		return $markup;
+	}
+}
+
+add_shortcode('knrmultifeed', array('KnrMultiFeedShortcode', 'main'));
